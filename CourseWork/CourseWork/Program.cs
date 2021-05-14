@@ -11,7 +11,7 @@ namespace CourseWork
             double[,] matrix4 = new double[,]{{1,2,1}, {0,8,1}, {1,1,9}};
             double[,] matrix3 = new double[,] {{1, 2, 0}, {0, 0, 1}, {1, 1, 9}};//LUP
             double[,] matrix2 = new double[,] {{1}, {4}, {5}};
-            MatrixOp.Print(LU_decomp.Inversion(matrix1));
+            MatrixOp.Print(LUP_decomp.Inversion(matrix3));
         }
     }
 }

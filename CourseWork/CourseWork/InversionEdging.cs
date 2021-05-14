@@ -2,9 +2,9 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace CourseWork
 {
-    public class InversionEdging
+    public class Edging
     {
-        public static double[,] Start(double[,] matrix)
+        public static double[,] Inversion(double[,] matrix)
         {
             double[,] matrixInversion = new double[,] {{1 / matrix[matrix.GetLength(0) - 1, matrix.GetLength(0) - 1]}};
             for (int i = 2; i < matrix.GetLength(0)+1; i++)

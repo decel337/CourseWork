@@ -81,5 +81,30 @@ namespace CourseWork
 
             return E;
         }
+
+        public static void SwapRow(double[,] matrix, int row1, int row2)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                double temp = matrix[row1, i];
+                matrix[row1, i] = matrix[row2, i];
+                matrix[row2, i] = temp;
+            }
+        }
+
+        public static double[,] Transpose(double[,] matrix)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    double temp = matrix[i, j];
+                    matrix[i, j] = matrix[j, i];
+                    matrix[j, i] = temp;
+                }
+            }
+
+            return matrix;
+        }
     }
 }

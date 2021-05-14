@@ -5,10 +5,14 @@ namespace CourseWork
         public static double[,] Inversion(double[,] matrix)
         {
             (double[,] L, double[,] U) = Start(matrix);
+            double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
+            return DecisionSystem(matrix, E, L, U);
+        }
+
+        public static double[,] DecisionSystem(double[,] matrix, double[,] E, double[,] L, double[,] U)
+        {
             double[,] Y = new double[matrix.GetLength(0), matrix.GetLength(1)];
             double[,] X = new double[matrix.GetLength(0), matrix.GetLength(1)];
-            //L*y = E
-            double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
             
             for (int j = 0; j < matrix.GetLength(0); j++)
             {
