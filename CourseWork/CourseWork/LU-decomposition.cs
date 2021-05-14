@@ -2,6 +2,32 @@ namespace CourseWork
 {
     public class LU_decomp
     {
+        public static double[,] Inversion(double[,] matrix)
+        {
+            (double[,] L, double[,] U) = Start(matrix);
+            double[,] Y = new double[matrix.GetLength(0), matrix.GetLength(1)];
+            double[,] X = new double[matrix.GetLength(0), matrix.GetLength(1)];
+            //L*y = E
+            double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
+            
+            for (int j = 0; j < matrix.GetLength(0); j++)
+            {
+                for (int i = 0; i < matrix.GetLength(1); i++)
+                {
+                    Y[i, j] = (E[i, j] - Sum(L, Y, i, j, "u"));
+                }
+            }
+            //UM-1 = Y
+            for (int j = 0; j < matrix.GetLength(0); j++)
+            {
+                for (int i = matrix.GetLength(1)-1; i >= 0; i--)
+                {
+                    X[i, j] = (Y[i, j] - Sum(U, X, i, j, "x"))/U[i,i];
+                }
+            }
+
+            return X;
+        }
         public static (double[,],double[,]) Start(double[,] matrix)
         {
             double[,] L = new double[matrix.GetLength(0),matrix.GetLength(1)];
@@ -18,7 +44,6 @@ namespace CourseWork
                 
                 for (int i = k; i < matrix.GetLength(0); i++)
                 {
-
                     L[i, k] = (matrix[i, k] - Sum(L, U, i, k, "l"))/ U[k, k];
                 }
                 k += 1;
@@ -42,6 +67,14 @@ namespace CourseWork
                 for (int m = 0; m < point2; m++)
                 {
                     result += L[point1, m] * U[m, point2];
+                }
+            }
+
+            if (op == "x")
+            {
+                for (int i = point1; i < L.GetLength(0); i++)
+                {
+                    result += L[point1, i] * U[i, point2];
                 }
             }
 

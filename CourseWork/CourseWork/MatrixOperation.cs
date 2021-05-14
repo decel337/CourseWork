@@ -70,5 +70,16 @@ namespace CourseWork
                 Console.WriteLine();
             }
         }
+
+        public static double[,] GenerateE(int a)
+        {
+            double[,] E = new double[a,a];
+            for (int i = 0; i < a; i++)
+            {
+                E[i, i] = 1;
+            }
+
+            return E;
+        }
     }
 }
