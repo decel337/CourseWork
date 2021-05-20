@@ -1,8 +1,6 @@
-using Microsoft.VisualBasic.CompilerServices;
-
-namespace CourseWork
+namespace CourseWorkGUI
 {
-    public class Edging
+    public class InversionEdging
     {
         public static double[,] Inversion(double[,] matrix)
         {
@@ -17,7 +15,7 @@ namespace CourseWork
 
         private static double[,] InversionMiniMatrix(double[,] matrix, int i, double[,] inv)
         {
-            double[,] matrixInversion = new double[i,i];
+            double[,] matrixInversion = new double[i,i];//4
             double[,] matrix1 = new double[,] {{matrix[matrix.GetLength(0) - i, matrix.GetLength(0) - i]}};
             double[,] matrix2 = new double[1, i - 1];
             double[,] matrix3 = new double[i - 1, 1];

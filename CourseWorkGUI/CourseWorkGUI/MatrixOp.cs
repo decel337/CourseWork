@@ -1,6 +1,4 @@
-using System;
-
-namespace CourseWork
+namespace CourseWorkGUI
 {
     public class MatrixOp
     {
@@ -56,20 +54,6 @@ namespace CourseWork
 
             return matrix;
         }
-        
-
-        public static void Print(double[,] matrix)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    Console.Write(Math.Round(matrix[i, j],3) + " ");
-                }
-
-                Console.WriteLine();
-            }
-        }
 
         public static double[,] GenerateE(int a)
         {
@@ -90,21 +74,6 @@ namespace CourseWork
                 matrix[row1, i] = matrix[row2, i];
                 matrix[row2, i] = temp;
             }
-        }
-
-        public static double[,] Transpose(double[,] matrix)
-        {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(0); j++)
-                {
-                    double temp = matrix[i, j];
-                    matrix[i, j] = matrix[j, i];
-                    matrix[j, i] = temp;
-                }
-            }
-
-            return matrix;
         }
     }
 }

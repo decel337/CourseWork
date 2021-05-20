@@ -1,15 +1,17 @@
+
 using System;
 
-namespace CourseWork
+namespace CourseWorkGUI
 {
-    public class LUP_decomp
+    public class InversionLUP
     {
         public static double[,] Inversion(double[,] matrix)
         {
             double[,] P = GetMatrixPermutation(matrix);
-            (double[,] L, double[,] U) = LU_decomp.Start(MatrixOp.Multiply(P, matrix));
-            return LU_decomp.DecisionSystem(matrix, P, L, U);
+            (double[,] L, double[,] U) = InversionLU.Start(MatrixOp.Multiply(P, matrix));
+            return InversionLU.DecisionSystem(matrix, P, L, U);
         }
+
         public static double[,] GetMatrixPermutation(double[,] matrix)
         {
             double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
@@ -19,7 +21,7 @@ namespace CourseWork
                 int iPivot = i;
                 for (int j = i; j < matrix.GetLength(0); j++)
                 {
-                    if (Math.Abs(matrix[j,i])> pivot)
+                    if (Math.Abs(matrix[j, i]) > pivot)
                     {
                         pivot = Math.Abs(matrix[j, i]);
                         iPivot = j;

@@ -1,6 +1,6 @@
-namespace CourseWork
+namespace CourseWorkGUI
 {
-    public class LU_decomp
+    public class InversionLU
     {
         public static double[,] Inversion(double[,] matrix)
         {
@@ -13,7 +13,7 @@ namespace CourseWork
         {
             double[,] Y = new double[matrix.GetLength(0), matrix.GetLength(1)];
             double[,] X = new double[matrix.GetLength(0), matrix.GetLength(1)];
-            
+
             for (int j = 0; j < matrix.GetLength(0); j++)
             {
                 for (int i = 0; i < matrix.GetLength(1); i++)
@@ -21,37 +21,40 @@ namespace CourseWork
                     Y[i, j] = (E[i, j] - Sum(L, Y, i, j, "u"));
                 }
             }
-            //UM-1 = Y
+
             for (int j = 0; j < matrix.GetLength(0); j++)
             {
-                for (int i = matrix.GetLength(1)-1; i >= 0; i--)
+                for (int i = matrix.GetLength(1) - 1; i >= 0; i--)
                 {
-                    X[i, j] = (Y[i, j] - Sum(U, X, i, j, "x"))/U[i,i];
+                    X[i, j] = (Y[i, j] - Sum(U, X, i, j, "x")) / U[i, i];
                 }
             }
 
             return X;
         }
-        public static (double[,],double[,]) Start(double[,] matrix)
+
+        public static (double[,], double[,]) Start(double[,] matrix)
         {
-            double[,] L = new double[matrix.GetLength(0),matrix.GetLength(1)];
-            double[,] U = new double[matrix.GetLength(0),matrix.GetLength(1)];
+            double[,] L = new double[matrix.GetLength(0), matrix.GetLength(1)];
+            double[,] U = new double[matrix.GetLength(0), matrix.GetLength(1)];
 
             int k = 0;
 
-            while(k != matrix.GetLength(0))
+            while (k != matrix.GetLength(0))
             {
-                for (int i = 0; i < k+1; i++)
+                for (int i = 0; i < k + 1; i++)
                 {
                     U[i, k] = (matrix[i, k] - Sum(L, U, i, k, "u"));
                 }
-                
+
                 for (int i = k; i < matrix.GetLength(0); i++)
                 {
-                    L[i, k] = (matrix[i, k] - Sum(L, U, i, k, "l"))/ U[k, k];
+                    L[i, k] = (matrix[i, k] - Sum(L, U, i, k, "l")) / U[k, k];
                 }
+
                 k += 1;
             }
+
             return (L, U);
         }
 
