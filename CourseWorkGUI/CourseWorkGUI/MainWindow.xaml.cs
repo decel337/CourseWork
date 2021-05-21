@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -22,6 +23,8 @@ namespace CourseWorkGUI
             InitializeOpen();
             InitializeSave();
             Methods.SelectedIndex = 0;
+            scroll.Value = 1;
+            Scroll_OnScroll(scroll, new ScrollEventArgs(ScrollEventType.First, scroll.Value));
             //Methods.SelectedIndex = (int)Methods.FindName("Method edging minor");
 
         }
@@ -47,7 +50,9 @@ namespace CourseWorkGUI
             if (dialog.ShowDialog() == false) return;
 
             string filename = dialog.FileName;
-            double[,] matrix = FileReader.Read(filename);
+            matrix = FileReader.Read(filename);
+            infofile.Text = "File appload";
+            infofile.Foreground = Brushes.Green;
         }
         
         private void SaveOnExecuted(object sender, ExecutedRoutedEventArgs b)
@@ -61,45 +66,57 @@ namespace CourseWorkGUI
 
         private void Scroll_OnScroll(object sender, ScrollEventArgs e)
         {
-            text_scroll.Text = ((int)scroll.Value).ToString();
-
-            int newCount = (int)scroll.Value;
-            _textBoxesCount=newCount;
-
-            contGrid.Children.Clear();
-            contGrid.RowDefinitions.Clear();
-            contGrid.ColumnDefinitions.Clear();
-
-            for (int i = 0; i < newCount; i++)
+            if (_previousValue != (int)scroll.Value)
             {
-                contGrid.RowDefinitions.Add(new RowDefinition());
-                contGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            }
+                text_scroll.Text = ((int) scroll.Value).ToString();
 
-            for (int i = 0; i < newCount; i++)
-            {
-                for (int j = 0; j < newCount; j++)
+                int newCount = (int) scroll.Value;
+                _textBoxesCount = newCount;
+
+                contGrid.Children.Clear();
+                contGrid.RowDefinitions.Clear();
+                contGrid.ColumnDefinitions.Clear();
+
+                for (int i = 0; i < newCount; i++)
                 {
-                    TextBox box = new TextBox();
-                    box.FontSize = 250 / newCount;
-                    box.VerticalAlignment = VerticalAlignment.Center;
-                    box.TextAlignment=TextAlignment.Center;
-                    box.SetValue(Grid.RowProperty, i);
-                    box.SetValue(Grid.ColumnProperty, j);
-                    contGrid.Children.Add(box);
+                    contGrid.RowDefinitions.Add(new RowDefinition());
+                    contGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 }
-            }
 
+                for (int i = 0; i < newCount; i++)
+                {
+                    for (int j = 0; j < newCount; j++)
+                    {
+                        TextBox box = new TextBox();
+                        box.FontSize = 250 / newCount;
+                        box.VerticalAlignment = VerticalAlignment.Center;
+                        box.TextAlignment = TextAlignment.Center;
+                        box.SetValue(Grid.RowProperty, i);
+                        box.SetValue(Grid.ColumnProperty, j);
+                        contGrid.Children.Add(box);
+                    }
+                }
+
+                _previousValue = newCount;
+            }
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            matrix = new double[_textBoxesCount, _textBoxesCount];
-            for (int i = 0; i < _textBoxesCount; i++)
+            
+            resultGrid.Children.Clear();
+            resultGrid.RowDefinitions.Clear();
+            resultGrid.ColumnDefinitions.Clear();
+            
+            if (infofile.Text == "File not appload")
             {
-                for (int j = 0; j < _textBoxesCount; j++)
+                matrix = new double[_textBoxesCount, _textBoxesCount];
+                for (int i = 0; i < _textBoxesCount; i++)
                 {
-                    matrix[i, j] = double.Parse(((TextBox)contGrid.Children[i*_textBoxesCount+j]).Text);
+                    for (int j = 0; j < _textBoxesCount; j++)
+                    {
+                        matrix[i, j] = double.Parse(((TextBox) contGrid.Children[i * _textBoxesCount + j]).Text);
+                    }
                 }
             }
 
@@ -118,12 +135,18 @@ namespace CourseWorkGUI
                 inversionMatrix = InversionLUP.Inversion(matrix);
             }
             
+            for (int i = 0; i < inversionMatrix.GetLength(0); i++)
+            {
+                resultGrid.RowDefinitions.Add(new RowDefinition());
+                resultGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < matrix.GetLength(0); j++)
                 {
                     TextBox box = new TextBox();
-                    box.Text = inversionMatrix[i, j].ToString();
+                    box.Text = Math.Round(inversionMatrix[i, j], 3).ToString();
                     box.FontSize = 250 / matrix.GetLength(0);
                     box.VerticalAlignment = VerticalAlignment.Center;
                     box.TextAlignment=TextAlignment.Center;
@@ -132,11 +155,8 @@ namespace CourseWorkGUI
                     resultGrid.Children.Add(box);
                 }
             }
-        }
-
-        private void Methods_OnSelected(object sender, RoutedEventArgs e)
-        {
-            
+            infofile.Text = "File not appload";
+            infofile.Foreground=Brushes.Red;
         }
     }
 }
