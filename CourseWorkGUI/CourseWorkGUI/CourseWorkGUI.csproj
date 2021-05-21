@@ -58,6 +58,8 @@
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Include="FileReader.cs" />
+        <Compile Include="FileWriter.cs" />
         <Compile Include="InversionEdging.cs" />
         <Compile Include="InversionLU.cs" />
         <Compile Include="InversionLUP.cs" />
