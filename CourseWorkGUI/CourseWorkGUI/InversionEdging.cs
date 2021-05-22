@@ -4,13 +4,18 @@ namespace CourseWorkGUI
     {
         public static double[,] Inversion(double[,] matrix)
         {
+            double[,] P = InversionLUP.GetMatrixPermutation(matrix);
+            
+            matrix = MatrixOp.Multiply(P, matrix);
+            
             double[,] matrixInversion = new double[,] {{1 / matrix[matrix.GetLength(0) - 1, matrix.GetLength(0) - 1]}};
+            
             for (int i = 2; i < matrix.GetLength(0)+1; i++)
             {
                 matrixInversion = InversionMiniMatrix(matrix, i, matrixInversion);
             }
 
-            return matrixInversion;
+            return MatrixOp.Multiply(matrixInversion, P);
         }
 
         private static double[,] InversionMiniMatrix(double[,] matrix, int i, double[,] inv)
