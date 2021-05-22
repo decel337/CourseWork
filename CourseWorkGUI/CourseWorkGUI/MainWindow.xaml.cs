@@ -56,9 +56,12 @@ namespace CourseWorkGUI
             if (matrix.GetLength(0) <= 15)
             {
                 ClearGrid(contGrid);
+                ClearGrid(resultGrid);
+                
                 InitGridValue(contGrid, matrix);
                 scroll.Value = matrix.GetLength(0);
                 _textBoxesCount = (int)scroll.Value;
+                _previousValue = (int) scroll.Value;
                 text_scroll.Text = ((int) scroll.Value).ToString();
             }
 
@@ -86,6 +89,7 @@ namespace CourseWorkGUI
                 _textBoxesCount = newCount;
 
                 ClearGrid(contGrid);
+                ClearGrid(resultGrid);
                 
                 InitGrid(contGrid,newCount);
 
@@ -97,6 +101,12 @@ namespace CourseWorkGUI
         {
             
             ClearGrid(resultGrid);
+
+            if (Determinate.IsZero(matrix))
+            {
+                inforesult.Text = "Determinate is zero";
+                return;
+            }
             
             if (infofile.Text == "File not appload")
             {
@@ -119,25 +129,41 @@ namespace CourseWorkGUI
             else if (Methods.SelectedIndex == 1)
             {
                 inversionMatrix = InversionLU.Inversion(matrix);
+
+                if (inversionMatrix == null)
+                {
+                    inforesult.Text = "Matrix not decomposition method LU. Try another method";
+                    inforesult.Foreground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+                }
             }
             else if (Methods.SelectedIndex == 2)
             {
+                inversionMatrix = InversionLU.Inversion(matrix);
+                
+                if (inversionMatrix == null)
+                {
+                    inversionMatrix = InversionLUP.Inversion(matrix);
+                }
+
                 inversionMatrix = InversionLUP.Inversion(matrix);
             }
 
-            if (inversionMatrix.GetLength(0) <= 15)
+            if (inversionMatrix!= null && inversionMatrix.GetLength(0) <= 15)
             {
                 InitGridValue(resultGrid, inversionMatrix);
             }
-            else
+            else if(inversionMatrix!= null && inversionMatrix.GetLength(0) > 15)
             {
                 InitializeSave();
             }
 
             infofile.Text = "File not appload";
             infofile.Foreground=Brushes.Red;
-            inforesult.Text = "Successfully";
-            inforesult.Foreground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+            if (inversionMatrix != null)
+            {
+                inforesult.Text = "Successfully";
+                inforesult.Foreground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+            }
         }
 
         private void InitGridValue(Grid grid, double[,] matrix)

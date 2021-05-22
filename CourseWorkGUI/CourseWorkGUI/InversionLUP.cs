@@ -30,7 +30,7 @@ namespace CourseWorkGUI
 
                 if (pivot == 0)
                 {
-                    Console.WriteLine("Singular matrix");
+                    return null;
                 }
 
                 if (i != iPivot)

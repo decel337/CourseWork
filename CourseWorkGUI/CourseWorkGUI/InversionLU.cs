@@ -4,9 +4,17 @@ namespace CourseWorkGUI
     {
         public static double[,] Inversion(double[,] matrix)
         {
-            (double[,] L, double[,] U) = Start(matrix);
-            double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
-            return DecisionSystem(matrix, E, L, U);
+            if (Start(matrix) != (null, null))
+            {
+                (double[,] L, double[,] U) = Start(matrix);
+                double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
+                return DecisionSystem(matrix, E, L, U);
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
         public static double[,] DecisionSystem(double[,] matrix, double[,] E, double[,] L, double[,] U)
@@ -49,6 +57,10 @@ namespace CourseWorkGUI
 
                 for (int i = k; i < matrix.GetLength(0); i++)
                 {
+                    if (U[k,k] == 0)
+                    {
+                        return (null,null);
+                    }
                     L[i, k] = (matrix[i, k] - Sum(L, U, i, k, "l")) / U[k, k];
                 }
 
