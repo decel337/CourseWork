@@ -13,19 +13,21 @@ namespace CourseWorkGUI
     /// </summary>
     public partial class MainWindow
     {
-        int _textBoxesCount=0;
+        private Random r = new Random();
+        int _textBoxesCount=1;
         int _previousValue = 0;
         private double[,] matrix;
+        private double[,] inversionMatrix;
         
         public MainWindow()
         {
             InitializeComponent();
             InitializeOpen();
             InitializeSave();
+            
             Methods.SelectedIndex = 0;
             scroll.Value = 1;
             Scroll_OnScroll(scroll, new ScrollEventArgs(ScrollEventType.First, scroll.Value));
-            //Methods.SelectedIndex = (int)Methods.FindName("Method edging minor");
 
         }
 
@@ -51,17 +53,27 @@ namespace CourseWorkGUI
 
             string filename = dialog.FileName;
             matrix = FileReader.Read(filename);
+            if (matrix.GetLength(0) <= 15)
+            {
+                ClearGrid(contGrid);
+                InitGridValue(contGrid, matrix);
+                scroll.Value = matrix.GetLength(0);
+                _textBoxesCount = (int)scroll.Value;
+                text_scroll.Text = ((int) scroll.Value).ToString();
+            }
+
             infofile.Text = "File appload";
             infofile.Foreground = Brushes.Green;
         }
         
         private void SaveOnExecuted(object sender, ExecutedRoutedEventArgs b)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
+            SaveFileDialog dialog = new SaveFileDialog();
 
             if (dialog.ShowDialog() == false) return;
 
             string filename = dialog.FileName;
+            FileWriter.Write(filename, inversionMatrix);
         }
 
         private void Scroll_OnScroll(object sender, ScrollEventArgs e)
@@ -73,29 +85,9 @@ namespace CourseWorkGUI
                 int newCount = (int) scroll.Value;
                 _textBoxesCount = newCount;
 
-                contGrid.Children.Clear();
-                contGrid.RowDefinitions.Clear();
-                contGrid.ColumnDefinitions.Clear();
-
-                for (int i = 0; i < newCount; i++)
-                {
-                    contGrid.RowDefinitions.Add(new RowDefinition());
-                    contGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                }
-
-                for (int i = 0; i < newCount; i++)
-                {
-                    for (int j = 0; j < newCount; j++)
-                    {
-                        TextBox box = new TextBox();
-                        box.FontSize = 250 / newCount;
-                        box.VerticalAlignment = VerticalAlignment.Center;
-                        box.TextAlignment = TextAlignment.Center;
-                        box.SetValue(Grid.RowProperty, i);
-                        box.SetValue(Grid.ColumnProperty, j);
-                        contGrid.Children.Add(box);
-                    }
-                }
+                ClearGrid(contGrid);
+                
+                InitGrid(contGrid,newCount);
 
                 _previousValue = newCount;
             }
@@ -104,9 +96,7 @@ namespace CourseWorkGUI
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             
-            resultGrid.Children.Clear();
-            resultGrid.RowDefinitions.Clear();
-            resultGrid.ColumnDefinitions.Clear();
+            ClearGrid(resultGrid);
             
             if (infofile.Text == "File not appload")
             {
@@ -120,7 +110,7 @@ namespace CourseWorkGUI
                 }
             }
 
-            double[,] inversionMatrix = new double[matrix.GetLength(0), matrix.GetLength(0)];
+            inversionMatrix = new double[matrix.GetLength(0), matrix.GetLength(0)];
             
             if (Methods.SelectedIndex == 0)
             {
@@ -134,29 +124,96 @@ namespace CourseWorkGUI
             {
                 inversionMatrix = InversionLUP.Inversion(matrix);
             }
-            
-            for (int i = 0; i < inversionMatrix.GetLength(0); i++)
+
+            if (inversionMatrix.GetLength(0) <= 15)
             {
-                resultGrid.RowDefinitions.Add(new RowDefinition());
-                resultGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                InitGridValue(resultGrid, inversionMatrix);
+            }
+            else
+            {
+                InitializeSave();
             }
 
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(0); j++)
-                {
-                    TextBox box = new TextBox();
-                    box.Text = Math.Round(inversionMatrix[i, j], 3).ToString();
-                    box.FontSize = 250 / matrix.GetLength(0);
-                    box.VerticalAlignment = VerticalAlignment.Center;
-                    box.TextAlignment=TextAlignment.Center;
-                    box.SetValue(Grid.RowProperty, i);
-                    box.SetValue(Grid.ColumnProperty, j);
-                    resultGrid.Children.Add(box);
-                }
-            }
             infofile.Text = "File not appload";
             infofile.Foreground=Brushes.Red;
+            inforesult.Text = "Successfully";
+            inforesult.Foreground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+        }
+
+        private void InitGridValue(Grid grid, double[,] matrix)
+        {
+            int length = matrix.GetLength(0);
+            for (int i = 0; i < length; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition());
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    TextBox box = new TextBox();
+                    box.Text = Math.Round(matrix[i, j], 3).ToString();
+                    box.FontSize = 50 / length;
+                    box.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    box.Width = contGrid.Width / length;
+                    box.Height = contGrid.Height / length;
+                    box.VerticalContentAlignment = VerticalAlignment.Center;
+                    box.TextAlignment = TextAlignment.Center;
+                    box.SetValue(Grid.RowProperty, i);
+                    box.SetValue(Grid.ColumnProperty, j);
+                    grid.Children.Add(box);
+                }
+            }
+        }
+
+        private void InitGrid(Grid grid, int length)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    grid.RowDefinitions.Add(new RowDefinition());
+                    grid.ColumnDefinitions.Add(new ColumnDefinition());
+                }
+
+                for (int i = 0; i < length; i++)
+                {
+                    for (int j = 0; j < length; j++)
+                    {
+                        TextBox box = new TextBox();
+                        box.FontSize = 50 / length;
+                        box.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                        box.Width = contGrid.Width / length;
+                        box.Height = contGrid.Height / length;
+                        box.VerticalContentAlignment = VerticalAlignment.Center;
+                        box.TextAlignment = TextAlignment.Center;
+                        box.SetValue(Grid.RowProperty, i);
+                        box.SetValue(Grid.ColumnProperty, j);
+                        grid.Children.Add(box);
+                    }
+                }
+        }
+
+        private void ClearGrid(Grid grid)
+        {
+            grid.Children.Clear();
+            grid.RowDefinitions.Clear();
+            grid.ColumnDefinitions.Clear();
+            inforesult.Text = "";
+        }
+
+        private void GridRandom()
+        {
+            matrix = new double[(int) scroll.Value, (int) scroll.Value];
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    matrix[i, j] = r.NextDouble() * 200 - 100;
+                }
+            }
+            
+            InitGridValue(contGrid, matrix);
         }
     }
 }

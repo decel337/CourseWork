@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CourseWorkGUI"
         mc:Ignorable="d"
         Title="MainWindow" Height="1000" Width="525">
-    <StackPanel Name="container2">
+    <StackPanel>
         <Menu>
             <MenuItem Header = "_File">
             <MenuItem Header = "_Open"
@@ -16,6 +16,13 @@
                       Command = "Save">
             </MenuItem>
                 </MenuItem>
+            
+            <MenuItem Header = "_Operation">
+                <MenuItem Header = "_Random">
+                </MenuItem>
+                <MenuItem Header = "_Clear">
+                </MenuItem>
+            </MenuItem>
         </Menu>
         <TextBox
             Name="text_scroll"
@@ -49,6 +56,8 @@
                 <TextBlock>Invertible matrix</TextBlock>
             </Button>
         </StackPanel>
+        <TextBlock Name="inforesult"
+                   ></TextBlock>
         <Grid Height="300" 
               Width="300" 
               Name="resultGrid"
