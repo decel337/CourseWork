@@ -7,7 +7,7 @@ namespace CourseWorkGUI
             if (Start(matrix) != (null, null))
             {
                 (double[,] L, double[,] U) = Start(matrix);
-                double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
+                double[,] E = InversionLUP.GenerateE(matrix.GetLength(0));
                 return DecisionSystem(matrix, E, L, U);
             }
             else

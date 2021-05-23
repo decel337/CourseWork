@@ -102,12 +102,6 @@ namespace CourseWorkGUI
             
             ClearGrid(resultGrid);
 
-            if (Determinate.IsZero(matrix))
-            {
-                inforesult.Text = "Determinate is zero";
-                return;
-            }
-            
             if (infofile.Text == "File not appload")
             {
                 matrix = new double[_textBoxesCount, _textBoxesCount];
@@ -118,6 +112,12 @@ namespace CourseWorkGUI
                         matrix[i, j] = double.Parse(((TextBox) contGrid.Children[i * _textBoxesCount + j]).Text);
                     }
                 }
+            }
+            
+            if (Determinate.IsZero(matrix))
+            {
+                inforesult.Text = "Determinate is zero";
+                return;
             }
 
             inversionMatrix = new double[matrix.GetLength(0), matrix.GetLength(0)];
@@ -144,8 +144,6 @@ namespace CourseWorkGUI
                 {
                     inversionMatrix = InversionLUP.Inversion(matrix);
                 }
-
-                inversionMatrix = InversionLUP.Inversion(matrix);
             }
 
             if (inversionMatrix!= null && inversionMatrix.GetLength(0) <= 15)

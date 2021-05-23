@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 
 namespace CourseWorkGUI
@@ -22,7 +23,7 @@ namespace CourseWorkGUI
                     string[] tempArr = temp.Split(' ');
                     for (int j = 0; j < matrix.GetLength(1); j++)
                     {
-                        matrix[i, j] = double.Parse(tempArr[j]);
+                        matrix[i, j] = double.Parse(tempArr[j],  CultureInfo.InvariantCulture);
                     }
                 }
 

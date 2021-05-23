@@ -55,17 +55,6 @@ namespace CourseWorkGUI
             return matrix;
         }
 
-        public static double[,] GenerateE(int a)
-        {
-            double[,] E = new double[a,a];
-            for (int i = 0; i < a; i++)
-            {
-                E[i, i] = 1;
-            }
-
-            return E;
-        }
-
         public static void SwapRow(double[,] matrix, int row1, int row2)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)

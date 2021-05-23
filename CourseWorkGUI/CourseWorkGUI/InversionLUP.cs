@@ -14,7 +14,7 @@ namespace CourseWorkGUI
 
         public static double[,] GetMatrixPermutation(double[,] matrix)
         {
-            double[,] E = MatrixOp.GenerateE(matrix.GetLength(0));
+            double[,] E = GenerateE(matrix.GetLength(0));
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 double pivot = 0;
@@ -37,6 +37,17 @@ namespace CourseWorkGUI
                 {
                     MatrixOp.SwapRow(E, i, iPivot);
                 }
+            }
+
+            return E;
+        }
+        
+        public static double[,] GenerateE(int a)
+        {
+            double[,] E = new double[a,a];
+            for (int i = 0; i < a; i++)
+            {
+                E[i, i] = 1;
             }
 
             return E;
