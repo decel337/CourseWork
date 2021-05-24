@@ -17,13 +17,21 @@ namespace CourseWorkGUI
             
             using (StreamReader read = new StreamReader(path))
             {
+                double num = 0;
                 for (int i = 0; i < matrix.GetLength(0); i++)
                 {
                     string temp = read.ReadLine();
                     string[] tempArr = temp.Split(' ');
                     for (int j = 0; j < matrix.GetLength(1); j++)
                     {
-                        matrix[i, j] = double.Parse(tempArr[j],  CultureInfo.InvariantCulture);
+                        if (double.TryParse(tempArr[j],NumberStyles.Any, CultureInfo.InvariantCulture, out num))
+                        {
+                            matrix[i, j] = num;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                 }
 

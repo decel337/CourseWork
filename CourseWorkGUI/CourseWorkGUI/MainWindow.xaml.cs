@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -24,7 +25,7 @@ namespace CourseWorkGUI
             InitializeComponent();
             InitializeOpen();
             InitializeSave();
-            
+
             Methods.SelectedIndex = 0;
             scroll.Value = 1;
             Scroll_OnScroll(scroll, new ScrollEventArgs(ScrollEventType.First, scroll.Value));
@@ -53,20 +54,29 @@ namespace CourseWorkGUI
 
             string filename = dialog.FileName;
             matrix = FileReader.Read(filename);
-            if (matrix.GetLength(0) <= 15)
+            
+            if (matrix == null)
             {
-                ClearGrid(contGrid);
-                ClearGrid(resultGrid);
-                
-                InitGridValue(contGrid, matrix);
-                scroll.Value = matrix.GetLength(0);
-                _textBoxesCount = (int)scroll.Value;
-                _previousValue = (int) scroll.Value;
-                text_scroll.Text = ((int) scroll.Value).ToString();
+                MessageBox.Show("Incorrect input", "Try again");
             }
+            else
+            {
+                if (matrix.GetLength(0) <= 15)
+                {
+                    ClearGrid(contGrid);
+                    ClearGrid(resultGrid);
 
-            infofile.Text = "File appload";
-            infofile.Foreground = Brushes.Green;
+                    InitGridValue(contGrid, matrix);
+                    scroll.Value = matrix.GetLength(0);
+                    _textBoxesCount = (int) scroll.Value;
+                    _previousValue = (int) scroll.Value;
+                    text_scroll.Text = ((int) scroll.Value).ToString();
+                }
+
+                infofile.Text = "File upload";
+                MessageBox.Show("Successfully", "File upload");
+                infofile.Foreground = Brushes.Green;
+            }
         }
         
         private void SaveOnExecuted(object sender, ExecutedRoutedEventArgs b)
@@ -76,7 +86,11 @@ namespace CourseWorkGUI
             if (dialog.ShowDialog() == false) return;
 
             string filename = dialog.FileName;
-            FileWriter.Write(filename, inversionMatrix);
+            if (inversionMatrix != null)
+            {
+                FileWriter.Write(filename, inversionMatrix);
+                MessageBox.Show("Successfully", "File download");
+            }
         }
 
         private void Scroll_OnScroll(object sender, ScrollEventArgs e)
@@ -102,21 +116,40 @@ namespace CourseWorkGUI
             
             ClearGrid(resultGrid);
 
-            if (infofile.Text == "File not appload")
+            if (infofile.Text == "File does not upload")
             {
+                double num;
                 matrix = new double[_textBoxesCount, _textBoxesCount];
                 for (int i = 0; i < _textBoxesCount; i++)
                 {
                     for (int j = 0; j < _textBoxesCount; j++)
                     {
-                        matrix[i, j] = double.Parse(((TextBox) contGrid.Children[i * _textBoxesCount + j]).Text);
+                        if (double.TryParse(((TextBox) contGrid.Children[i * _textBoxesCount + j]).Text,NumberStyles.Any, CultureInfo.InvariantCulture, out num))
+                        {
+                            matrix[i, j] = num;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Incorrect input", "Try again");
+                            return;
+                        }
                     }
                 }
             }
-            
-            if (Determinate.IsZero(matrix))
+
+            double[,] matrix1 = new double[matrix.GetLength(0),matrix.GetLength(0)];
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                inforesult.Text = "Determinate is zero";
+                for (int j = 0; j < matrix.GetLength(0); j++)
+                {
+                    matrix1[i, j] = matrix[i, j];
+                }
+            }
+            
+            if (Determinate.IsZero(matrix1))
+            {
+                MessageBox.Show("Determinate is zero");
                 return;
             }
 
@@ -132,7 +165,7 @@ namespace CourseWorkGUI
 
                 if (inversionMatrix == null)
                 {
-                    inforesult.Text = "Matrix not decomposition method LU. Try another method";
+                    MessageBox.Show("Try another method","Matrix not decomposition method LU");
                     inforesult.Foreground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
                 }
             }
@@ -146,21 +179,26 @@ namespace CourseWorkGUI
                 }
             }
 
-            if (inversionMatrix!= null && inversionMatrix.GetLength(0) <= 15)
+            if (inversionMatrix != null&&inversionMatrix.GetLength(0) <= 15)
             {
                 InitGridValue(resultGrid, inversionMatrix);
             }
-            else if(inversionMatrix!= null && inversionMatrix.GetLength(0) > 15)
+            else if(inversionMatrix != null&&inversionMatrix.GetLength(0) > 15)
             {
                 InitializeSave();
             }
 
-            infofile.Text = "File not appload";
+            infofile.Text = "File does not upload";
             infofile.Foreground=Brushes.Red;
             if (inversionMatrix != null)
             {
                 inforesult.Text = "Successfully";
+                MessageBox.Show("Successfully");
                 inforesult.Foreground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+            }
+            else
+            {
+                
             }
         }
 
@@ -233,11 +271,21 @@ namespace CourseWorkGUI
             {
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    matrix[i, j] = r.NextDouble() * 200 - 100;
+                    matrix[i, j] = Math.Round(r.NextDouble() * 200 - 100);
                 }
             }
-            
+            ClearGrid(contGrid);
             InitGridValue(contGrid, matrix);
+        }
+
+        private void RandomGrid_OnClick(object sender, RoutedEventArgs e)
+        {
+            GridRandom();
+        }
+    
+        private void GridClear_OnClick(object sender, RoutedEventArgs e)
+        {
+            ClearGrid(contGrid);
         }
     }
 }
