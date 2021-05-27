@@ -5,6 +5,9 @@ namespace CourseWorkGUI
 {
     public class FileReader
     {
+        /// <summary>
+        /// Read matrix from input file
+        /// </summary>
         public static double[,] Read(string path)
         {
             double[,] matrix = new double[1, 1];

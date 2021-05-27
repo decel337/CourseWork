@@ -5,13 +5,19 @@ namespace CourseWorkGUI
 {
     public class InversionLUP
     {
+        /// <summary>
+        /// Inversion matrix method LUP
+        /// </summary>
         public static double[,] Inversion(double[,] matrix)
         {
             double[,] P = GetMatrixPermutation(matrix);
-            (double[,] L, double[,] U) = InversionLU.Start(MatrixOp.Multiply(P, matrix));
+            (double[,] L, double[,] U) = InversionLU.Decomposition(MatrixOp.Multiply(P, matrix));
             return InversionLU.DecisionSystem(matrix, P, L, U);
         }
 
+        /// <summary>
+        /// Get matrix permutation for input matrix
+        /// </summary>
         public static double[,] GetMatrixPermutation(double[,] matrix)
         {
             double[,] E = GenerateE(matrix.GetLength(0));
@@ -42,6 +48,9 @@ namespace CourseWorkGUI
             return E;
         }
         
+        /// <summary>
+        /// Generate singular matrix
+        /// </summary>
         public static double[,] GenerateE(int a)
         {
             double[,] E = new double[a,a];

@@ -2,11 +2,15 @@ namespace CourseWorkGUI
 {
     public class InversionLU
     {
+        
+        /// <summary>
+        /// Inversion matrix method LU
+        /// </summary>
         public static double[,] Inversion(double[,] matrix)
         {
-            if (Start(matrix) != (null, null))
+            if (Decomposition(matrix) != (null, null))
             {
-                (double[,] L, double[,] U) = Start(matrix);
+                (double[,] L, double[,] U) = Decomposition(matrix);
                 double[,] E = InversionLUP.GenerateE(matrix.GetLength(0));
                 return DecisionSystem(matrix, E, L, U);
             }
@@ -16,6 +20,10 @@ namespace CourseWorkGUI
             }
             
         }
+        
+        /// <summary>
+        /// Decision System for search invert matrix (L*y = E, y = U*X, where X is invert matrix)
+        /// </summary>
 
         public static double[,] DecisionSystem(double[,] matrix, double[,] E, double[,] L, double[,] U)
         {
@@ -40,8 +48,11 @@ namespace CourseWorkGUI
 
             return X;
         }
-
-        public static (double[,], double[,]) Start(double[,] matrix)
+        
+        /// <summary>
+        /// Decomposition matrix on tow matrix: L and U.
+        /// </summary>
+        public static (double[,], double[,]) Decomposition(double[,] matrix)
         {
             double[,] L = new double[matrix.GetLength(0), matrix.GetLength(1)];
             double[,] U = new double[matrix.GetLength(0), matrix.GetLength(1)];
@@ -69,7 +80,10 @@ namespace CourseWorkGUI
 
             return (L, U);
         }
-
+        
+        /// <summary>
+        /// Search sum for Decomposition and DecisionSystem
+        /// </summary>
         private static double Sum(double[,] L, double[,] U, int point1, int point2, string op)
         {
             double result = 0;

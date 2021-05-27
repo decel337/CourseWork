@@ -4,6 +4,9 @@ namespace CourseWorkGUI
 {
     public class FileWriter
     {
+        /// <summary>
+        /// Write in file result matrix
+        /// </summary>
         public static void Write(string path, double[,] matrix)
         {
             using (StreamWriter write = new StreamWriter(path))

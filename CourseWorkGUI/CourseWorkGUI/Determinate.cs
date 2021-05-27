@@ -5,6 +5,9 @@ namespace CourseWorkGUI
 {
     public class Determinate
     {
+        /// <summary>
+        /// Check, determinate is zero or not (Gauss method)
+        /// </summary>
         public static bool IsZero(double[,] matrix)
         {
             double det = 1;

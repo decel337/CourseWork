@@ -2,6 +2,9 @@ namespace CourseWorkGUI
 {
     public class InversionEdging
     {
+        /// <summary>
+        /// Inversion matrix method edging
+        /// </summary>
         public static double[,] Inversion(double[,] matrix)
         {
             double[,] P = InversionLUP.GetMatrixPermutation(matrix);
@@ -17,6 +20,10 @@ namespace CourseWorkGUI
 
             return MatrixOp.Multiply(matrixInversion, P);
         }
+        
+        /// <summary>
+        /// Inversion mini matrix, in the process of finding invert matrix
+        /// </summary>
 
         private static double[,] InversionMiniMatrix(double[,] matrix, int i, double[,] inv)
         {

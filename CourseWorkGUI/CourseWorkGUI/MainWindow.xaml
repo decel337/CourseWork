@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseWorkGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="810" Width="525" MaxHeight="810" MinHeight="810" MaxWidth="525" MinWidth="525" Background="Pink">
+        Title="Inversion Matrix" Height="800" Width="1200" MaxHeight="800" MinHeight="800" MaxWidth="1200" MinWidth="1200" Background="Pink">
     <StackPanel>
         <Menu>
             <MenuItem Header = "_File">
@@ -20,33 +20,58 @@
             <MenuItem Header = "_Operation">
                 <MenuItem Header = "_Random" Click="RandomGrid_OnClick">
                 </MenuItem>
+                <MenuItem Header = "_RandomFile" Click="RandomFile_OnClick">
+                </MenuItem>
                 <MenuItem Header = "_Clear" Click="GridClear_OnClick">
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <TextBox
+        <StackPanel Orientation="Horizontal">
+            <TextBlock
+                Width="200"
+                TextAlignment="Center"
+                Background="Pink"
+                FontSize="30"
+                Margin="200,0,0, 0"
+            >Start matrix</TextBlock>
+            <StackPanel Orientation="Vertical" Margin="50,0,0, 0">
+        <TextBlock
             Name="text_scroll"
             Width="50"
             TextAlignment="Center"
-            BorderThickness="0"
-        ></TextBox>
+        ></TextBlock>
         <ScrollBar Name = "scroll"
-                   Maximum="15"
+                   Maximum="10"
                    Minimum="1"
                    Orientation="Horizontal"
                    Width="300"
                    Scroll="Scroll_OnScroll"
-        ></ScrollBar>
-        <Grid Height="300" 
-              Width="300" 
-              Name="contGrid"
-              Margin="0,10,0, 0"
-              ></Grid>
-        <StackPanel Orientation="Horizontal" Margin="0,20,0, 0">
-        <TextBlock Margin="75,0,0, 0">Chose Method</TextBlock>
-            <TextBlock Margin="175,0,0, 0" Foreground="Red" Name="infofile">"File does not upload"</TextBlock>
+        ></ScrollBar></StackPanel>
+            <TextBlock
+                Name = "ResultMatrix"
+                Width="200"
+                TextAlignment="Center"
+                Background="Pink"
+                FontSize="30"
+                Margin="50,0,0, 0"
+            ></TextBlock>
         </StackPanel>
-            <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal">
+        <Grid Height="500" 
+              Width="500" 
+              Name="contGrid"
+              Margin="50,10,0, 0"
+              ></Grid>
+        <Grid Height="500" 
+              Width="500" 
+              Name="resultGrid"
+              Margin="100,10,0, 0"
+        ></Grid></StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="300,20,0, 0">
+        <TextBlock Margin="75,0,0, 0">Chose Method</TextBlock>
+            <TextBlock Margin="175,0,0, 0" Foreground="Red" Name="infofile">File does not upload</TextBlock>
+        </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="300,0,0, 0">
             <ComboBox Name="Methods" Height="30" Width="200" VerticalAlignment="Top" Margin="75,10,0, 0">
                 <TextBlock>Method edging minor</TextBlock>
                 <TextBlock>Method LU-decomposition</TextBlock>
@@ -58,11 +83,6 @@
         </StackPanel>
         <TextBlock Name="inforesult"
                    ></TextBlock>
-        <Grid Height="300" 
-              Width="300" 
-              Name="resultGrid"
-              Margin="0,10,0, 0"
-        ></Grid>
        
         
         <!-- <StackPanel -->
